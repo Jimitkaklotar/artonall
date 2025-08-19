@@ -1,5 +1,7 @@
+// src/app/ProductDetails/page.tsx
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { ImageBaseUrl } from "../Api";
@@ -36,12 +38,21 @@ const ThreeImageViewer = dynamic(
   { ssr: false }
 );
 
-export default function ProductDetails() {
-  /* ------------------------------------------------------------------ */
-  /* 1. hooks & basic state                                             */
-  /* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
+/* 0. quick Product type                                              */
+/* ------------------------------------------------------------------ */
+export interface Product {
+  product_name: string;
+  product_price: string;
+  product_image_1: string;
+}
+
+/* ------------------------------------------------------------------ */
+/* 1. inner component that uses useSearchParams                       */
+/* ------------------------------------------------------------------ */
+function ProductDetailsInner() {
   const searchParams = useSearchParams();
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [selectedBackground, setSelectedBackground] = useState("");
   const [showCanvas, setShowCanvas] = useState(false);
   const [selectedColor, setSelectedColor] = useState("#E5CFC6");
@@ -224,8 +235,7 @@ export default function ProductDetails() {
                 <ThreeImageViewer
                   imageUrl={`${ImageBaseUrl}${product.product_image_1}`}
                   selectedMaterial={selectedMaterial}
-                  imageShape={imageShape}
-                  frameColor={selectedColor}
+                  // frameColor={selectedColor}
                 />
               </div>
             )}
@@ -484,6 +494,8 @@ export default function ProductDetails() {
             <Image
               src={`${ImageBaseUrl}${product.product_image_1}`}
               alt="Full View"
+              width={1200} // ← add this
+              height={800} // ← add this
               className="max-h-[90vh] max-w-[90vw] object-contain rounded-md border border-blue-500"
             />
             <div className="flex flex-col gap-2 z-10">
@@ -512,7 +524,13 @@ export default function ProductDetails() {
               <IoCloseSharp className="text-3xl" />
             </button>
 
-            <Image src={ARVIEW.src} alt="AR Preview" className="w-full rounded" />
+            <Image
+              src={ARVIEW.src}
+              alt="AR Preview"
+              width={400} // ← add this
+              height={300} // ← add this
+              className="w-full rounded"
+            />
             <div className="text-center">
               <h2 className="text-xl font-semibold mb-1">
                 See it in your space
@@ -529,6 +547,8 @@ export default function ProductDetails() {
                   arDeepLink
                 )}`}
                 alt="QR"
+                width={200}
+                height={200}
               />
             </div>
 
@@ -556,5 +576,22 @@ export default function ProductDetails() {
         </div>
       )}
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* 3. page default export – wrapped in Suspense                       */
+/* ------------------------------------------------------------------ */
+export default function ProductDetailsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-gray-600">
+          Loading product details...
+        </div>
+      }
+    >
+      <ProductDetailsInner />
+    </Suspense>
   );
 }
