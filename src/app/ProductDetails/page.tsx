@@ -41,7 +41,7 @@ export default function ProductDetails() {
   /* 1. hooks & basic state                                             */
   /* ------------------------------------------------------------------ */
   const searchParams = useSearchParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<any>(null);
   const [selectedBackground, setSelectedBackground] = useState("");
   const [showCanvas, setShowCanvas] = useState(false);
   const [selectedColor, setSelectedColor] = useState("#E5CFC6");
@@ -50,8 +50,8 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState("Small 200 x 300mm");
   const [imageShape, setImageShape] = useState("Square");
 
-  const imageRef = useRef(null);
-  const canvasContainerRef = useRef(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 800, height: 500 });
 
   const [showQRModal, setShowQRModal] = useState(false);
@@ -78,7 +78,7 @@ export default function ProductDetails() {
   useEffect(() => {
     if (!canvasContainerRef.current) return;
     const obs = new ResizeObserver((entries) => {
-      for (let e of entries) {
+      for (const e of entries) {
         const w = e.contentRect.width;
         setCanvasSize({ width: w, height: (w * 3) / 4 });
       }
@@ -161,9 +161,11 @@ export default function ProductDetails() {
                 !showCanvas ? "border-blue-600" : "border-transparent"
               }`}
             >
-              <img
+              <Image
                 src={`${ImageBaseUrl}${product.product_image_1}`}
                 alt="Product"
+                width={64}
+                height={64}
                 className="w-full h-full object-cover rounded-xl"
               />
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
@@ -184,9 +186,11 @@ export default function ProductDetails() {
                     : "border-transparent"
                 }`}
               >
-                <img
+                <Image
                   src={bg.src}
                   alt={bg.label}
+                  width={64}
+                  height={64}
                   className="w-full h-full object-cover rounded-xl"
                 />
               </div>
@@ -438,27 +442,33 @@ export default function ProductDetails() {
           {/* payment icons */}
           <div className="mt-6">
             <h1 className="text-lg font-bold mb-2">Payment and security:</h1>
-            <img
+            <Image
               src={Shopify.src}
               alt="Shopify"
+              width={96}
+              height={40}
               className="w-24 object-cover"
             />
             <div className="mt-2 text-sm text-gray-600 flex gap-2">
               {[Visa, Rupay, PayPal, Ipay, Gpay].map((img, i) => (
-                <img
+                <Image
                   key={i}
                   src={img.src}
                   alt="pay"
+                  width={64}
+                  height={40}
                   className="w-16 object-cover"
                 />
               ))}
             </div>
             <div className="mt-10 text-sm text-gray-600 flex items-center gap-2">
               {[Links, Meta, Twitter, Pintrest, LinkedIn].map((img, i) => (
-                <img
+                <Image
                   key={i}
                   src={img.src}
                   alt="social"
+                  width={40}
+                  height={40}
                   className="w-10 object-cover"
                 />
               ))}
@@ -471,7 +481,7 @@ export default function ProductDetails() {
       {isFullViewOpen && (
         <div className="fixed inset-0 z-[999] bg-[#111] flex items-center justify-center">
           <div className="flex items-start justify-center gap-6">
-            <img
+            <Image
               src={`${ImageBaseUrl}${product.product_image_1}`}
               alt="Full View"
               className="max-h-[90vh] max-w-[90vw] object-contain rounded-md border border-blue-500"
@@ -502,7 +512,7 @@ export default function ProductDetails() {
               <IoCloseSharp className="text-3xl" />
             </button>
 
-            <img src={ARVIEW.src} alt="AR Preview" className="w-full rounded" />
+            <Image src={ARVIEW.src} alt="AR Preview" className="w-full rounded" />
             <div className="text-center">
               <h2 className="text-xl font-semibold mb-1">
                 See it in your space
@@ -514,7 +524,7 @@ export default function ProductDetails() {
 
             {/* QR code */}
             <div className="border rounded-md p-2">
-              <img
+              <Image
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
                   arDeepLink
                 )}`}

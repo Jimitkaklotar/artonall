@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image"; // ✅ import Next.js Image
 import { GetAllProductAPI, ImageBaseUrl } from "../Api"; // adjust if needed
 
 interface Product {
@@ -17,7 +18,7 @@ const TopProduct: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true); // Ensures client-only rendering
+    setHasMounted(true);
 
     const fetchProducts = async () => {
       try {
@@ -33,7 +34,6 @@ const TopProduct: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // Avoid SSR hydration issues
   if (!hasMounted) {
     return null;
   }
@@ -49,6 +49,7 @@ const TopProduct: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
               <Link
+                key={product._id} // ✅ FIX: Added key prop
                 href={{
                   pathname: "/ProductDetails",
                   query: { product: JSON.stringify(product) },
@@ -57,9 +58,11 @@ const TopProduct: React.FC = () => {
               >
                 <div className="p-4 rounded-lg cursor-pointer transition duration-300">
                   <div className="overflow-hidden rounded-md shadow-xl shadow-gray-400 mb-4">
-                    <img
+                    <Image
                       src={`${ImageBaseUrl}${product.product_image_1}`}
                       alt={product.product_name}
+                      width={500} // ✅ required for next/image
+                      height={500} // ✅ required for next/image
                       className="w-full object-cover h-60 transform transition-transform duration-500 ease-in-out hover:scale-110"
                     />
                   </div>

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
 
 export default function CreatePassword() {
   const [form, setForm] = useState({

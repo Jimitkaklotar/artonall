@@ -71,11 +71,15 @@ const LatestDesigns: React.FC = () => {
                 className=""
               >
                 <div className="overflow-hidden cursor-pointer transition">
-                  <div className="rounded-lg overflow-hidden">
-                    <img
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden">
+                    <Image
                       src={`${ImageBaseUrl}${product.product_image_1}`}
                       alt={product.product_name}
-                      className="w-full h-65 object-cover  transform transition-transform duration-500 ease-in-out hover:scale-110"
+                      fill
+                      sizes="(max-width: 768px) 100vw,
+                             (max-width: 1200px) 50vw,
+                             25vw"
+                      className="object-cover transform transition-transform duration-500 ease-in-out hover:scale-110"
                     />
                   </div>
                   <div className="text-center py-2">
@@ -96,13 +100,13 @@ const LatestDesigns: React.FC = () => {
           )}
         </div>
       </div>
+
       {/* Button */}
       <div className="text-right mt-10">
         <button className="inline-flex items-center gap-2 border-2 border-white text-white px-6 py-2 rounded-full transition">
           Shop More <FaArrowRight />
         </button>
       </div>
-
     </section>
   );
 };
