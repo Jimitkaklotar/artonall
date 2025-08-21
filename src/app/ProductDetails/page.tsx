@@ -173,7 +173,7 @@ function ProductDetailsInner() {
               }`}
             >
               <Image
-                src={`${ImageBaseUrl}${encodeURIComponent(product.product_image_1)}`}
+                src={`${ImageBaseUrl}${product.product_image_1}`}
                 alt="Product"
                 width={64}
                 height={64}
@@ -211,7 +211,7 @@ function ProductDetailsInner() {
           {/* main viewer */}
           <div
             ref={canvasContainerRef}
-            className="w-full md:max-w-[800px] flex justify-center items-center"
+            className="w-full md:max-w-[750px] flex justify-center items-center"
           >
             {showCanvas ? (
               selectedBackground && (

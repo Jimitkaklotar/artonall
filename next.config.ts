@@ -9,6 +9,12 @@ const nextConfig = {
         port: "",
         pathname: "/public/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "artonall-backend.onrender.com",
+        port: "",
+        pathname: "/**",
+      },
       // allow QR codes from qrserver.com
       {
         protocol: "https",

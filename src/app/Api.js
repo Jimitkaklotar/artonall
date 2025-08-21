@@ -86,3 +86,5 @@ export const TokenBaseFetchApi = async (
 // For Image Base url 
 
 export const ImageBaseUrl = "https://artonall-backend.onrender.com/public/images/"
+
+export const ImageUrl = "https://artonall-backend.onrender.com";

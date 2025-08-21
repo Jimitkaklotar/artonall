@@ -79,7 +79,7 @@ const RecentlyViewed: FC = () => {
               className="rounded-lg overflow-hidden"
             >
               <Image
-                src={product.image}
+                src={product.image} // ✅ Fixed: removed ImageUrl
                 alt={product.title}
                 width={600}
                 height={400}
