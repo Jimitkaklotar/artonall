@@ -173,7 +173,7 @@ function ProductDetailsInner() {
               }`}
             >
               <Image
-                src={`${ImageBaseUrl}${product.product_image_1}`}
+                src={`${ImageBaseUrl}${encodeURIComponent(product.product_image_1)}`}
                 alt="Product"
                 width={64}
                 height={64}

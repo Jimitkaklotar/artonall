@@ -2,7 +2,7 @@ import Axios from "axios";
 
 // --------------------------------------------------------------------------
 // ToDo : Base Url Server
-const BaseURL = "http://localhost:4000/";
+const BaseURL = "https://artonall-backend.onrender.com/";
 // const BaseURL = "http://103.10.234.158:8800/";
 // --------------------------------------------------------------------------
 
@@ -85,4 +85,4 @@ export const TokenBaseFetchApi = async (
 
 // For Image Base url 
 
-export const ImageBaseUrl = "http://localhost:4000/public/images/"
+export const ImageBaseUrl = "https://artonall-backend.onrender.com/public/images/"

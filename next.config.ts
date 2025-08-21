@@ -4,9 +4,9 @@ const nextConfig = {
     remotePatterns: [
       // allow images from your local backend
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "4000",
+        protocol: "https",
+        hostname: "artonall-backend.onrender.com",
+        port: "",
         pathname: "/public/images/**",
       },
       // allow QR codes from qrserver.com
