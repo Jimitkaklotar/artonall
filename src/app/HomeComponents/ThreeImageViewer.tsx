@@ -6,6 +6,8 @@ import { OrbitControls, useGLTF, useTexture } from "@react-three/drei";
 import { OrbitControls as OrbitControlsType } from "three-stdlib";
 import * as THREE from "three";
 
+import ProductBackground from "../../../public/Product/product_background.jpg";
+
 // Helper: choose correct GLB
 const getGLBPath = (material: string) => {
   switch (material) {
@@ -69,7 +71,8 @@ const Model: React.FC<ModelProps> = ({ imageUrl, material, onLoaded }) => {
         mesh.receiveShadow = true;
 
         const meshName = mesh.name.toLowerCase();
-        const materialName = (mesh.material as THREE.Material)?.name?.toLowerCase?.() || "";
+        const materialName =
+          (mesh.material as THREE.Material)?.name?.toLowerCase?.() || "";
 
         const isFront =
           meshName.includes("front") ||
@@ -130,12 +133,30 @@ const Model: React.FC<ModelProps> = ({ imageUrl, material, onLoaded }) => {
   return <primitive object={scene} />;
 };
 
+// 🔹 Background Component
+// const SceneBackground: React.FC = () => {
+//   const texture = useTexture(ProductBackground.src); // use .src for Next.js image import
+//   const { scene } = useThree();
+
+//   useEffect(() => {
+//     if (texture) {
+//       texture.colorSpace = THREE.SRGBColorSpace;
+//       scene.background = texture; // set background image
+//     }
+//   }, [texture, scene]);
+
+//   return null;
+// };
+
 interface ViewerCanvasProps {
   imageUrl: string;
   selectedMaterial: string;
 }
 
-const ViewerCanvas: React.FC<ViewerCanvasProps> = ({ imageUrl, selectedMaterial }) => {
+const ViewerCanvas: React.FC<ViewerCanvasProps> = ({
+  imageUrl,
+  selectedMaterial,
+}) => {
   const controlsRef = useRef<OrbitControlsType | null>(null);
   const { camera, gl } = useThree();
 
@@ -162,11 +183,22 @@ const ViewerCanvas: React.FC<ViewerCanvasProps> = ({ imageUrl, selectedMaterial 
 
   return (
     <>
+      {/* Background */}
+      {/* <SceneBackground /> */}
+
+      {/* Lights */}
       <ambientLight position={[0, 0, 5]} intensity={1.3} />
       <directionalLight position={[0.5, 0.5, 6]} intensity={0.5} />
+
+      {/* Model */}
       <Suspense fallback={null}>
-        <Model imageUrl={imageUrl} material={selectedMaterial} onLoaded={handleModelLoaded} />
+        <Model
+          imageUrl={imageUrl}
+          material={selectedMaterial}
+          onLoaded={handleModelLoaded}
+        />
       </Suspense>
+
       <OrbitControls ref={controlsRef} enableZoom />
     </>
   );
@@ -177,18 +209,20 @@ interface ThreeImageViewerProps {
   selectedMaterial: string;
 }
 
-const ThreeImageViewer: React.FC<ThreeImageViewerProps> = ({ imageUrl, selectedMaterial }) => {
+const ThreeImageViewer: React.FC<ThreeImageViewerProps> = ({
+  imageUrl,
+  selectedMaterial,
+}) => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => setIsClient(true), []);
   if (!isClient) return null;
 
   return (
-    <div style={{ width: "100%", height: "500px", backgroundColor: "black" }}>
+    <div style={{ width: "100%", height: "500px" }}>
       <Canvas
         camera={{ position: [0, 0, 3], fov: 50 }}
         shadows
         gl={{ antialias: true }}
-        style={{ background: "#000000" }}
       >
         <ViewerCanvas imageUrl={imageUrl} selectedMaterial={selectedMaterial} />
       </Canvas>

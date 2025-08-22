@@ -12,6 +12,8 @@ import Sofaroom from "../../../public/Product/sofa.jpg";
 import Hallroom from "../../../public/Product/hall.jpg";
 import Studyroom from "../../../public/Product/studyroom.jpg";
 
+import ProductBackground from "../../../public/Product/product_background.jpg";
+
 import { AiOutlineHeart } from "react-icons/ai";
 import { FiZoomIn, FiPlus, FiMinus } from "react-icons/fi";
 import { TbAugmentedReality } from "react-icons/tb";
@@ -159,7 +161,12 @@ function ProductDetailsInner() {
         {/* LEFT ---------------------------------------------------------- */}
         <div
           ref={imageRef}
-          className="w-full h-full lg:min-w-4xl flex-1 flex xl:justify-center xl:items-start flex-col-reverse xl:flex-row relative bg-[#10111a] rounded-md p-4 gap-6"
+          className="w-full h-full lg:min-w-4xl flex-1 flex xl:justify-center xl:items-start flex-col-reverse xl:flex-row relative rounded-md p-4 gap-6"
+          style={{
+            backgroundImage: `url(${ProductBackground.src})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         >
           {/* thumbnails */}
           <div className="flex xl:flex-col gap-2 overflow-x-auto sm:overflow-visible">
@@ -223,7 +230,8 @@ function ProductDetailsInner() {
                   className="rounded-md object-contain"
                 />
               )
-            ) : (
+            ) :
+             (
               <div
                 className={`w-full h-[400px] md:h-[500px] rounded-md overflow-hidden ${
                   isGrabbing ? "cursor-grabbing" : "cursor-grab"

@@ -16,7 +16,7 @@ const products: Product[] = [
     id: 1,
     title: "Captian America Shield print",
     price: 30.0,
-    image: "/home/product1.png", // replace with your image path
+    image: "/home/product1.png", // ✅ correct path
     swatches: ["#d4c4b1", "#d2cbc1", "#b49d8d", "#dbc9b7"],
   },
   {
@@ -74,12 +74,9 @@ const RecentlyViewed: FC = () => {
         {/* First Row - Two Items */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {products.slice(0, 2).map((product) => (
-            <div
-              key={product.id}
-              className="rounded-lg overflow-hidden"
-            >
+            <div key={product.id} className="rounded-lg overflow-hidden">
               <Image
-                src={product.image} // ✅ Fixed: removed ImageUrl
+                src={product.image}
                 alt={product.title}
                 width={600}
                 height={400}
@@ -107,10 +104,7 @@ const RecentlyViewed: FC = () => {
         {/* Second Row - Remaining Items */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {products.slice(2).map((product) => (
-            <div
-              key={product.id}
-              className="rounded-lg overflow-hidden"
-            >
+            <div key={product.id} className="rounded-lg overflow-hidden">
               <Image
                 src={product.image}
                 alt={product.title}
