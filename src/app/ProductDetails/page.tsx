@@ -157,13 +157,13 @@ function ProductDetailsInner() {
 
   return (
     <div className="min-h-screen px-4 md:px-8 lg:px-12 py-8">
-      <div className="flex flex-col lg:flex-row gap-10">
+      <div className="flex flex-col xl:flex-row gap-10">
         {/* LEFT ---------------------------------------------------------- */}
         <div
           ref={imageRef}
-          className="w-full h-full lg:min-w-4xl flex-1 flex xl:justify-center xl:items-start flex-col-reverse xl:flex-row relative rounded-md p-4 gap-6"
+          className="w-full h-[80vh] lg:min-w-4xl flex-1 flex xl:justify-center xl:items-start flex-col-reverse xl:flex-row relative rounded-md p-4 gap-6"
           style={{
-            backgroundImage: `url(${ProductBackground.src})`,
+            backgroundImage: `url(${ selectedBackground ||ProductBackground.src})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -220,37 +220,26 @@ function ProductDetailsInner() {
             ref={canvasContainerRef}
             className="w-full md:max-w-[750px] flex justify-center items-center"
           >
-            {showCanvas ? (
-              selectedBackground && (
-                <Image
-                  src={selectedBackground}
-                  alt="2D Image"
-                  width={canvasSize.width}
-                  height={canvasSize.height}
-                  className="rounded-md object-contain"
-                />
-              )
-            ) :
-             (
+            {!showCanvas ? (
               <div
-                className={`w-full h-[400px] md:h-[500px] rounded-md overflow-hidden ${
-                  isGrabbing ? "cursor-grabbing" : "cursor-grab"
-                }`}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
-              >
-                <ThreeImageViewer
-                  imageUrl={`${ImageBaseUrl}${product.product_image_1}`}
-                  selectedMaterial={selectedMaterial}
-                  // frameColor={selectedColor}
-                />
-              </div>
-            )}
+              className={`w-full h-[400px] md:h-[500px] rounded-md overflow-hidden ${
+                isGrabbing ? "cursor-grabbing" : "cursor-grab"
+              }`}
+              onMouseDown={handleMouseDown}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+            >
+              <ThreeImageViewer
+                imageUrl={`${ImageBaseUrl}${product.product_image_1}`}
+                selectedMaterial={selectedMaterial}
+                // frameColor={selectedColor}
+              />
+            </div>
+            ) : null}
           </div>
 
           {/* desktop icons */}
-          <div className="hidden md:flex absolute top-4 right-4 flex-col gap-3 z-10">
+          <div className="hidden lg:flex absolute top-4 right-4 flex-col gap-3 z-10">
             <button className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center cursor-pointer">
               <AiOutlineHeart className="text-xl text-black" />
             </button>
@@ -269,7 +258,7 @@ function ProductDetailsInner() {
           </div>
 
           {/* mobile icons */}
-          <div className="flex md:hidden gap-3 z-50">
+          <div className="flex lg:hidden gap-3 z-50">
             <button className="w-10 h-10 rounded-full bg-white text-black shadow flex items-center justify-center">
               <AiOutlineHeart className="text-xl" />
             </button>
@@ -280,7 +269,7 @@ function ProductDetailsInner() {
               <FiZoomIn className="text-xl" />
             </button>
             <button
-              onClick={() => setShowQRModal(true)}
+              onClick={() => window.open("https://ar-view-seven.vercel.app/", "_blank")}
               className="w-10 h-10 rounded-full bg-white text-black shadow flex items-center justify-center"
             >
               <TbAugmentedReality className="text-xl" />

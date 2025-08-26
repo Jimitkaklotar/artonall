@@ -66,7 +66,7 @@ const HomePage: FC = () => {
       </section>
 
       {/* Categories Slider */}
-      <section className="bg-black py-4 overflow-x-auto whitespace-nowrap flex items-center justify-center">
+      <section className="bg-black py-4 overflow-hidden whitespace-nowrap flex items-center justify-center">
         {mainImages.map((img, i) => (
           <Image
             key={i}
