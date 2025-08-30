@@ -53,7 +53,7 @@ export default function Navbar() {
       </div>
 
       {/* Main Navbar */}
-      <nav className="navbar-main shadow-md sticky top-0 z-50">
+      <nav className="navbar-main shadow-md sticky top-0 z-10">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-20 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link href="/">

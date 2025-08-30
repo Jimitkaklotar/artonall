@@ -71,6 +71,20 @@ function ProductDetailsInner() {
   const [isFullViewOpen, setIsFullViewOpen] = useState(false);
   const [isGrabbing, setIsGrabbing] = useState(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  // inside ProductDetailsInner, before return()
+  const [activeTab, setActiveTab] = useState("description");
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1440); // lg breakpoint
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   /* ------------------------------------------------------------------ */
   /* 2. fetch product                                                   */
   /* ------------------------------------------------------------------ */
@@ -161,15 +175,17 @@ function ProductDetailsInner() {
         {/* LEFT ---------------------------------------------------------- */}
         <div
           ref={imageRef}
-          className="w-full h-[80vh] lg:min-w-4xl flex-1 flex xl:justify-center xl:items-start flex-col-reverse xl:flex-row relative rounded-md p-4 gap-6"
+          className="w-full h-[80vh] xl:min-w-4xl flex-1 flex xl:justify-center xl:items-start flex-col-reverse xl:flex-row relative rounded-md p-4 gap-4"
           style={{
-            backgroundImage: `url(${ selectedBackground ||ProductBackground.src})`,
+            backgroundImage: !isMobile
+              ? `url(${selectedBackground || ProductBackground.src})`
+              : "none",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >
           {/* thumbnails */}
-          <div className="flex xl:flex-col gap-2 overflow-x-auto sm:overflow-visible">
+          <div className="flex xl:flex-col gap-2 overflow-x-auto sm:overflow-visible xl:pl-5">
             <div
               onClick={() => {
                 setShowCanvas(false);
@@ -218,47 +234,64 @@ function ProductDetailsInner() {
           {/* main viewer */}
           <div
             ref={canvasContainerRef}
-            className="w-full md:max-w-[750px] flex justify-center items-center"
+            className="w-full md:max-w-[800px] flex justify-center items-center"
           >
-            {!showCanvas ? (
+            {showCanvas ? (
+              selectedBackground && (
+                <Image
+                  src={selectedBackground}
+                  alt="2D Image"
+                  width={canvasSize.width}
+                  height={canvasSize.height}
+                  className="xl:hidden rounded-md object-contain"
+                />
+              )
+            ) : (
               <div
-              className={`w-full h-[400px] md:h-[500px] rounded-md overflow-hidden ${
-                isGrabbing ? "cursor-grabbing" : "cursor-grab"
-              }`}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-            >
-              <ThreeImageViewer
-                imageUrl={`${ImageBaseUrl}${product.product_image_1}`}
-                selectedMaterial={selectedMaterial}
-                // frameColor={selectedColor}
-              />
-            </div>
-            ) : null}
+                className={`w-full h-[400px] md:h-[500px] rounded-md overflow-hidden ${
+                  isGrabbing ? "cursor-grabbing" : "cursor-grab"
+                }`}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                style={{
+                  backgroundImage: isMobile
+                    ? `url(${ProductBackground.src})` // 👈 mobile: only ProductBackground
+                    : "none", // 👈 desktop: normal logic
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                <ThreeImageViewer
+                  imageUrl={`${ImageBaseUrl}${product.product_image_1}`}
+                  selectedMaterial={selectedMaterial}
+                  // frameColor={selectedColor}
+                />
+              </div>
+            )}
           </div>
 
           {/* desktop icons */}
-          <div className="hidden lg:flex absolute top-4 right-4 flex-col gap-3 z-10">
-            <button className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center cursor-pointer">
+          <div className="hidden lg:flex absolute top-4 right-6 flex-col gap-3">
+            <button className="w-10 h-10 rounded-full bg-white shadow-xs shadow-black flex items-center justify-center cursor-pointer">
               <AiOutlineHeart className="text-xl text-black" />
             </button>
             <button
               onClick={handleZoomClick}
-              className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center cursor-pointer"
+              className="w-10 h-10 rounded-full bg-white shadow-xs shadow-black flex items-center justify-center cursor-pointer"
             >
               <FiZoomIn className="text-xl text-black" />
             </button>
             <button
               onClick={() => setShowQRModal(true)}
-              className="w-10 h-10 rounded-full bg-white shadow flex items-center justify-center cursor-pointer"
+              className="w-10 h-10 rounded-full bg-white shadow-xs shadow-black flex items-center justify-center cursor-pointer"
             >
               <TbAugmentedReality className="text-xl text-black" />
             </button>
           </div>
 
           {/* mobile icons */}
-          <div className="flex lg:hidden gap-3 z-50">
+          <div className="flex lg:hidden gap-3">
             <button className="w-10 h-10 rounded-full bg-white text-black shadow flex items-center justify-center">
               <AiOutlineHeart className="text-xl" />
             </button>
@@ -269,7 +302,9 @@ function ProductDetailsInner() {
               <FiZoomIn className="text-xl" />
             </button>
             <button
-              onClick={() => window.open("https://ar-view-seven.vercel.app/", "_blank")}
+              onClick={() =>
+                window.open("https://ar-view-seven.vercel.app/", "_blank")
+              }
               className="w-10 h-10 rounded-full bg-white text-black shadow flex items-center justify-center"
             >
               <TbAugmentedReality className="text-xl" />
@@ -278,7 +313,7 @@ function ProductDetailsInner() {
         </div>
 
         {/* RIGHT --------------------------------------------------------- */}
-        <div className="w-full lg:max-w-2xl">
+        <div className="w-full xl:max-w-2xl">
           <h1 className="text-2xl sm:text-3xl font-bold mb-3">
             {product.product_name}
           </h1>
@@ -484,18 +519,116 @@ function ProductDetailsInner() {
         </div>
       </div>
 
+      {/* Tabs Section */}
+      <div className="mt-6">
+        <div className="w-full gap-6 flex">
+          <div className="w-[60%]">
+            <div className="flex gap-3 mb-4">
+              <button
+                onClick={() => setActiveTab("description")}
+                className={`px-4 py-2 rounded-full cursor-pointer ${
+                  activeTab === "description"
+                    ? "bg-[#403C3C] text-white"
+                    : "bg-[#ECEFF4]"
+                }`}
+              >
+                Description
+              </button>
+              <button
+                onClick={() => setActiveTab("care")}
+                className={`px-4 py-2 rounded-full cursor-pointer ${
+                  activeTab === "care" ? "bg-[#403C3C] text-white" : "bg-[#ECEFF4]"
+                }`}
+              >
+                Care Instructions
+              </button>
+              <button
+                onClick={() => setActiveTab("shipping")}
+                className={`px-4 py-2 rounded-full cursor-pointer ${
+                  activeTab === "shipping"
+                    ? "bg-[#403C3C] text-white"
+                    : "bg-[#ECEFF4]"
+                }`}
+              >
+                Shipping & Returns
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            <div className="p-4 rounded-md bg-white">
+              {activeTab === "description" && (
+                <div>
+                  <p>
+                    Add a pop of colour to your kitchen or café with this bold
+                    and quirky fried egg acrylic print...
+                  </p>
+                </div>
+              )}
+              {activeTab === "care" && (
+                <ul className="list-disc pl-5">
+                  <li>Clean with a dry microfiber cloth</li>
+                  <li>Avoid harsh cleaning chemicals</li>
+                  <li>Do not expose to direct sunlight for long periods</li>
+                </ul>
+              )}
+              {activeTab === "shipping" && (
+                <p>
+                  Free worldwide shipping. Returns accepted within 30 days in
+                  original packaging.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="w-[40%] bg-[#E3E9FF] p-5 rounded-3xl">
+            <div className="flex justify-between py-5">
+              <div className="font-bold">Color pattern</div>
+              <div className="">Blue, White, Yellow</div>
+            </div>
+
+            <hr className="text-gray-500" />
+
+            <div className="flex justify-between py-5">
+              <div className="font-bold">Frame style</div>
+              <div className="">Acrylic</div>
+            </div>
+
+            <hr className="text-gray-500" />
+
+            <div className="flex justify-between py-5">
+              <div className="font-bold">
+                <span>Translation missing:</span>
+                <br />
+                <span>en.metafields.shopify.painting-medium</span>
+              </div>
+              <div className="">Acrylic</div>
+            </div>
+
+            <hr className="text-gray-500" />
+
+            <div className="flex justify-between py-5">
+              <div className="font-bold">Theme</div>
+              <div className="">Food & drinks</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* full-screen zoom */}
       {isFullViewOpen && (
-        <div className="fixed inset-0 z-[999] bg-[#111] flex items-center justify-center">
-          <div className="flex items-start justify-center gap-6">
+        <div className="fixed inset-0 z-[999] bg-[#111] flex items-center justify-center p-4">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-4 w-full max-w-[95vw]">
+            {/* IMAGE */}
             <Image
               src={`${ImageBaseUrl}${product.product_image_1}`}
               alt="Full View"
-              width={1200} // ← add this
-              height={800} // ← add this
-              className="max-h-[90vh] max-w-[90vw] object-contain rounded-md border border-blue-500"
+              width={1200}
+              height={800}
+              className="w-full h-auto max-h-[80vh] object-contain rounded-md border"
             />
-            <div className="flex flex-col gap-2 z-10">
+
+            {/* BUTTONS */}
+            <div className="flex flex-row lg:flex-col gap-3 mt-4 lg:mt-0">
               <button className="w-12 h-12 rounded-full bg-white text-black shadow cursor-pointer flex justify-center items-center">
                 <AiOutlineHeart className="text-2xl" />
               </button>
