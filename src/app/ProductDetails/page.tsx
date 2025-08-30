@@ -521,12 +521,13 @@ function ProductDetailsInner() {
 
       {/* Tabs Section */}
       <div className="mt-6">
-        <div className="w-full gap-6 flex">
-          <div className="w-[60%]">
-            <div className="flex gap-3 mb-4">
+        <div className="w-full gap-6 flex flex-col lg:flex-row items-start">
+          {/* LEFT */}
+          <div className="w-full lg:w-[60%]">
+            <div className="flex gap-3 mb-4 flex-wrap">
               <button
                 onClick={() => setActiveTab("description")}
-                className={`px-4 py-2 rounded-full cursor-pointer ${
+                className={`px-4 py-2 rounded-full cursor-pointer text-sm sm:text-base ${
                   activeTab === "description"
                     ? "bg-[#403C3C] text-white"
                     : "bg-[#ECEFF4]"
@@ -536,15 +537,17 @@ function ProductDetailsInner() {
               </button>
               <button
                 onClick={() => setActiveTab("care")}
-                className={`px-4 py-2 rounded-full cursor-pointer ${
-                  activeTab === "care" ? "bg-[#403C3C] text-white" : "bg-[#ECEFF4]"
+                className={`px-4 py-2 rounded-full cursor-pointer text-sm sm:text-base ${
+                  activeTab === "care"
+                    ? "bg-[#403C3C] text-white"
+                    : "bg-[#ECEFF4]"
                 }`}
               >
                 Care Instructions
               </button>
               <button
                 onClick={() => setActiveTab("shipping")}
-                className={`px-4 py-2 rounded-full cursor-pointer ${
+                className={`px-4 py-2 rounded-full cursor-pointer text-sm sm:text-base ${
                   activeTab === "shipping"
                     ? "bg-[#403C3C] text-white"
                     : "bg-[#ECEFF4]"
@@ -555,7 +558,7 @@ function ProductDetailsInner() {
             </div>
 
             {/* Tab Content */}
-            <div className="p-4 rounded-md bg-white">
+            <div className="p-4 rounded-md bg-white text-sm sm:text-base">
               {activeTab === "description" && (
                 <div>
                   <p>
@@ -565,7 +568,7 @@ function ProductDetailsInner() {
                 </div>
               )}
               {activeTab === "care" && (
-                <ul className="list-disc pl-5">
+                <ul className="list-disc pl-5 space-y-1">
                   <li>Clean with a dry microfiber cloth</li>
                   <li>Avoid harsh cleaning chemicals</li>
                   <li>Do not expose to direct sunlight for long periods</li>
@@ -580,22 +583,23 @@ function ProductDetailsInner() {
             </div>
           </div>
 
-          <div className="w-[40%] bg-[#E3E9FF] p-5 rounded-3xl">
-            <div className="flex justify-between py-5">
+          {/* RIGHT */}
+          <div className="w-full lg:w-[40%] bg-[#E3E9FF] p-5 rounded-3xl mt-6 lg:mt-0">
+            <div className="flex justify-between py-5 text-sm sm:text-base">
               <div className="font-bold">Color pattern</div>
               <div className="">Blue, White, Yellow</div>
             </div>
 
             <hr className="text-gray-500" />
 
-            <div className="flex justify-between py-5">
+            <div className="flex justify-between py-5 text-sm sm:text-base">
               <div className="font-bold">Frame style</div>
               <div className="">Acrylic</div>
             </div>
 
             <hr className="text-gray-500" />
 
-            <div className="flex justify-between py-5">
+            <div className="flex justify-between py-5 text-sm sm:text-base">
               <div className="font-bold">
                 <span>Translation missing:</span>
                 <br />
@@ -606,7 +610,7 @@ function ProductDetailsInner() {
 
             <hr className="text-gray-500" />
 
-            <div className="flex justify-between py-5">
+            <div className="flex justify-between py-5 text-sm sm:text-base">
               <div className="font-bold">Theme</div>
               <div className="">Food & drinks</div>
             </div>
